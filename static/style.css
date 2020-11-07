@@ -1,0 +1,19 @@
+main .form-control
+{
+    display: inline-block;
+    width: auto;
+}
+h3 h5
+{
+    text-align: center;
+    width: auto;
+}
+img
+{
+    height: 40px;
+    width: 40px;
+}
+main
+{
+    text-align: center;
+}

@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{%block title %} Login {% endblock %}
+
+{% block main %}
+
+<form>
+    <div class="form-group">
+<h3>Welcome to the Weatherapp50 <img src="static/heisses-wetter.png"></h3>
+
+<h5>Feel free to register below</h5>
+
+</div>
+     <div class="form-group">
+    <input type = "text" class="form-control" name="username" placeholder="Username">
+    </div>
+     <div class="form-group">
+    <input  type = "email" class="form-control" name="email"  placeholder="Email">
+    </div>
+     <div class="form-group">
+    <input  type = "password" class="form-control" name="password"  placeholder="Password">
+    </div>
+    <button class="btn btn-primary"  type="submit">Register</button>
+</form>
+
+{% endblock %}
