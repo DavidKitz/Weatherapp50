@@ -21,18 +21,14 @@ def apology(message, code=400):
     return render_template("apology.html", top=code, bottom=message), code
 
 
-def weatherapp(city):
+def weatherapp(city, cityid):
     api_key = os.environ.get("API_KEY")
-    url = "https://community-open-weather-map.p.rapidapi.com/weather"
 
-    querystring = {"q":city,"lat":"0","lon":"0","callback":"test","id":"2172797","lang":"null","units":"\"metric\""}
-
-    headers = {
-        'x-rapidapi-key': api_key,
-        'x-rapidapi-host': "community-open-weather-map.p.rapidapi.com"
-        }
-
-    response = requests.get(f"https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={api_key}")
+    print(cityid)
+    if cityid is None:
+        response = requests.get(f"https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={api_key}")
+    else:
+        response = requests.get(f"https://api.openweathermap.org/data/2.5/weather?id={cityid}&units=metric&appid={api_key}")
 
     return response.json()
 

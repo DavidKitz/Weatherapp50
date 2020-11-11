@@ -5,7 +5,6 @@ main .form-control
 }
 h3 h5
 {
-    text-align: center;
     width: auto;
 }
 img
@@ -16,4 +15,22 @@ img
 main
 {
     text-align: center;
+}
+
+#picture
+{
+    height:27px;
+    display: block;
+    margin: 1px;
+}
+#weather-data
+{
+    text-align:left;
+    background-color:#def3c5;
+    width: 50%;
+}
+#header
+{
+    height:24px;
+    margin-bottom: -5px;
 }
