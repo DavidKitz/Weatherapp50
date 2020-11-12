@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+   index
+{% endblock %}
+
+{% block main %}
+
+
+<table class="table">
+     <tr>
+            <th>Name</td>
+            <th>Weather condition</td>
+            <th>Temperature</td>
+
+
+        </tr>
+{% for sumhistories in sumHistory %}
+<tr>
+    <td>{{sumhistories["name"]}}</td>
+    <td>{{sumhistories["weather"][0]["description"]}} </td>
+    <td> {{sumhistories["main"]["temp"]}}°C</td>
+</tr>
+
+{% endfor %}
+
+
+</table>
+{% endblock %}

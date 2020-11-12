@@ -29,12 +29,26 @@ def index():
     if request.method == "GET":
         return render_template("index.html")
     else:
-        weather = request.form.get("location")
-        result = weatherapp(weather)
-        return render_template("test.html",result=result)
+        result = weatherapp(request.form.get("location"),None)
+        if result["cod"] == "404":
+            return apology("No data found for your search request",403)
+        url = "http://openweathermap.org/img/wn/"
+        sunrise = datetime.fromtimestamp(result["sys"]["sunrise"] + result["timezone"]).time()
+        sunset = datetime.fromtimestamp(result["sys"]["sunset"] + result["timezone"]).time()
+        duplicate = db.execute("SELECT * FROM 'history' WHERE data_id = :dataid", dataid = result["id"])
+        if len(duplicate) != 1:
+            db.execute("INSERT INTO 'history' (user_id, data_id) VALUES (:user_id, :data_id)", user_id = session["user_id"], data_id = result["id"])
+        return render_template("indexResult.html",result=result, sunrise = sunrise, sunset = sunset, url = url)
 
-
-
+@app.route("/history", methods=["GET", "POST"])
+@login_required
+def history():
+    if request.method == "GET":
+        sumHistory = []
+        history = db.execute("SELECT * FROM 'history' WHERE user_id = :session", session = session["user_id"] )
+        for histories in history:
+            sumHistory.append(weatherapp(None,histories["data_id"]))
+        return render_template("history.html", sumHistory = sumHistory)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -77,6 +91,8 @@ def register():
         db.execute("INSERT INTO 'users' (username,hash,email) VALUES (:username, :hash, :email)", username = username, hash = hash, email = email)
         return redirect("/login")
 
+@app.route("/logout", methods=["GET", "POST"])
+def logout():
+    session.clear()
 
-##@app.route("/logout", methods=["GET", "POST"])
-##def logout():
+    return redirect("/")
