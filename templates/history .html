@@ -9,18 +9,24 @@
 
 <table class="table">
      <tr>
-            <th>Name</td>
-            <th>Weather condition</td>
-            <th>Temperature</td>
-
+            <th>Name</th>
+            <th>Weather condition</th>
+            <th>Temperature</th>
+            <th>Date and Time</th>
 
         </tr>
 {% for sumhistories in sumHistory %}
+
 <tr>
     <td>{{sumhistories["name"]}}</td>
     <td>{{sumhistories["weather"][0]["description"]}} </td>
     <td> {{sumhistories["main"]["temp"]}}°C</td>
+    <td>{{history[loop.index-1]["time"]}}</td>
+    <form action="/" method="POST">
+    <td><button type="submit" class="btn btn-info" name="info" value={{sumhistories["id"]}}>More Info</button></td>
+    </form>
 </tr>
+
 
 {% endfor %}
 
