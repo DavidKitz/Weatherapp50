@@ -10,7 +10,8 @@ import time as tt
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 from helpers import apology, login_required, weatherapp
-
+import os
+import folium
 
 app = Flask(__name__)
 
@@ -50,7 +51,14 @@ def index():
             dayAndNight = "AM"
         else:
             dayAndNight = "PM"
-        print(dayAndNight)
+        #Setup map for current request
+        print(result["coord"]["lat"])
+        start_coords = (result["coord"]["lat"],result["coord"]["lon"])
+        folium_map = folium.Map(
+        location=start_coords,
+        zoom_start=17
+        )
+        folium_map.save('templates/map.html')
         if len(duplicate) != 1:
             db.execute("INSERT INTO 'history' (user_id, data_id, time) VALUES (:user_id, :data_id, :time)", user_id = session["user_id"], data_id = result["id"], time = time)
         return render_template("indexResult.html",result=result, sunrise = sunrise, sunset = sunset, url = url, timezone = timezone, dayAndNight = dayAndNight)
