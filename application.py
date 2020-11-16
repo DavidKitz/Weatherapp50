@@ -30,6 +30,9 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     if request.method == "GET":
+        for i in os.listdir("templates/"):
+            if i.startswith("map"):
+                os.remove(f"templates/{i}")
         return render_template("index.html")
     else:
         if request.form.get("info") is None:
@@ -39,6 +42,7 @@ def index():
         if result["cod"] == "404" or result["name"] == "None":
             return apology("No data found for your search request",403)
         url = "http://openweathermap.org/img/wn/"
+        #Setup current time and remove milliseconds from response
         sunrise = datetime.fromtimestamp(result["sys"]["sunrise"] + result["timezone"]).time()
         sunset = datetime.fromtimestamp(result["sys"]["sunset"] + result["timezone"]).time()
         duplicate = db.execute("SELECT * FROM 'history' WHERE data_id = :dataid", dataid = result["id"])
@@ -56,9 +60,10 @@ def index():
         start_coords = (result["coord"]["lat"],result["coord"]["lon"])
         folium_map = folium.Map(
         location=start_coords,
-        zoom_start=17
+        zoom_start=8
         )
-        folium_map.save('templates/map.html')
+        folium.Marker([result["coord"]["lat"],result["coord"]["lon"]]).add_to(folium_map)
+        folium_map.save(f'templates/map{result["id"]}.html')
         if len(duplicate) != 1:
             db.execute("INSERT INTO 'history' (user_id, data_id, time) VALUES (:user_id, :data_id, :time)", user_id = session["user_id"], data_id = result["id"], time = time)
         return render_template("indexResult.html",result=result, sunrise = sunrise, sunset = sunset, url = url, timezone = timezone, dayAndNight = dayAndNight)
@@ -72,6 +77,29 @@ def history():
         for histories in history:
             sumHistory.append(weatherapp(None,histories["data_id"]))
         return render_template("history.html", sumHistory = sumHistory, history = history)
+
+#get the map of the current indexResult location by passing the id
+@app.route('/map/<int:item_id>')
+def map(item_id):
+    return render_template(f'map{item_id}.html')
+
+@app.route("/display", methods=["GET", "POST"])
+@login_required
+def display():
+    sumHistory = []
+    history = db.execute("SELECT * FROM 'history' WHERE user_id = :session", session = session["user_id"] )
+    #random coords since zoom_start is so low 
+    start_coords = (16.37,48.21)
+    folium_map = folium.Map(
+    location=start_coords,
+    zoom_start=3
+    )
+    for histories in history:
+        sumHistory.append(weatherapp(None,histories["data_id"]))
+    for result in sumHistory:
+        folium.Marker([result["coord"]["lat"],result["coord"]["lon"]]).add_to(folium_map)
+    folium_map.save('templates/map.html')
+    return render_template("display.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -103,7 +131,6 @@ def register():
         email = request.form.get("email")
         checkUser = db.execute("SELECT * FROM 'users' WHERE username=:username",username=username)
         checkEmail = db.execute("SELECT * FROM 'users' WHERE email=:email",email=email)
-
         if len(checkUser) != 0:
             return apology("Username already exists", 403)
         if len(checkEmail) != 0:

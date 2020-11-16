@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 
 {%block title %} Weatherapp {% endblock %}
-
+{%block head %}
+ <meta http-Equiv="Cache-Control" Content="no-cache" />
+    <meta http-Equiv="Pragma" Content="no-cache" />
+    <meta http-Equiv="Expires" Content="0" />
+    {%endblock%}
 {% block main %}
 
 
@@ -10,14 +14,18 @@
 <h2>Weather data:</h2>
 <h5>
     <p id="header">Current weather data for: {{result["name"]}}</p>
-    <p id="picture">Weather conditions: {{result["weather"][0]["description"]}} <img src={{ url + result["weather"][0]["icon"] + "@2x.png"}}>
+    <p id="picture">Weather conditions: {{result["weather"][0]["description"]}} <img src={{url+result["weather"][0]["icon"]+"@2x.png"}}>
      </p>
      <p>Current Temperature: {{result["main"]["temp"]}}°C<br>
      Sunrise: {{sunrise}} AM<br>
-     Sunset: {{sunset}} PM
-     Current Time: {{timezone}} {{dayAndNight}}</p>
+     Sunset: {{sunset}} PM <br>
+     Current Time: {{timezone}} {{dayAndNight}}
+                                </p>
 
 </h5>
+</div>
+<div class="container">
+     <iframe class="map", src={{"/map/" + result["id"]|string}} width="600" height="600"></iframe>
 </div>
 <footer>
     <div class="form-group">
@@ -25,9 +33,6 @@
             <button id="lower" class="btn btn-primary"  type="submit">Look for more Weather data</button>
         </form>
     </div>
-    <div class="container">
-        <iframe class="map", src="/map" width="600" height="600"></iframe>
-   </div>
     <p>Usable data: <br>
          {{result}}
     </p>
