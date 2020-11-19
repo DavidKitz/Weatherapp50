@@ -4,14 +4,19 @@ from cs50 import SQL
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
-from datetime import datetime, timedelta
+from datetime import time, datetime, timedelta
 import datetime as dt
 import time as tt
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-from helpers import apology, login_required, weatherapp
+from helpers import apology, login_required, weatherapp, forecast
+import requests
+import json
 import os
 import folium
+import geocoder
+
+
 
 app = Flask(__name__)
 
@@ -26,6 +31,8 @@ db = SQL("sqlite:///weather.db")
 if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
 
+
+
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
@@ -34,6 +41,7 @@ def index():
             if i.startswith("map"):
                 os.remove(f"templates/{i}")
         return render_template("index.html")
+
     else:
         if request.form.get("info") is None:
             result = weatherapp(request.form.get("location"), None)
@@ -78,6 +86,20 @@ def history():
             sumHistory.append(weatherapp(None,histories["data_id"]))
         return render_template("history.html", sumHistory = sumHistory, history = history)
 
+
+
+@app.route("/forecast", methods=["GET", "POST"])
+@login_required
+def cast():
+    if request.method == "GET":
+        return render_template("forecast.html")
+    else:
+        city = request.form.get("location")
+        print(forecast(city))
+        return render_template("forecastResults.html")
+
+
+
 #get the map of the current indexResult location by passing the id
 @app.route('/map/<int:item_id>')
 def map(item_id):
@@ -88,7 +110,6 @@ def map(item_id):
 def display():
     sumHistory = []
     history = db.execute("SELECT * FROM 'history' WHERE user_id = :session", session = session["user_id"] )
-    #random coords since zoom_start is so low 
     start_coords = (16.37,48.21)
     folium_map = folium.Map(
     location=start_coords,
@@ -141,8 +162,8 @@ def register():
         db.execute("INSERT INTO 'users' (username,hash,email) VALUES (:username, :hash, :email)", username = username, hash = hash, email = email)
         return redirect("/login")
 
+
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
     session.clear()
-
     return redirect("/")
