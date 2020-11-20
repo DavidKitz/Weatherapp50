@@ -1,7 +1,7 @@
 import os
 import requests
 import urllib.parse
-
+import json
 from flask import redirect, render_template, request, session
 from functools import wraps
 
@@ -33,6 +33,12 @@ def weatherapp(city, cityid):
     return response.json()
 
 
+def forecast(city):
+    api_key = os.environ.get("API_KEY")
+    lon = city["lon"]
+    lat = city["lat"]
+    response = requests.get(f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&units=metric&exclude=minutely,hourly&appid={api_key}")
+    return response.json()
 
 
 def login_required(f):

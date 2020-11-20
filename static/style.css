@@ -22,15 +22,40 @@ main
     height:27px;
     display: block;
     margin: 1px;
+    overflow: hidden;
 }
 #weather-data
 {
-    text-align:left;
     background-color:#def3c5;
-    width: 50%;
+    width: 450px;
+    height: 200px;
+}
+#weather-data2
+{
+    background-color:#def3c5;
+    width: 150px;
+    margin: 10px;
+    font-size: larger;
 }
 #header
 {
-    height:24px;
+    width: 400px;
+    height: 24px;
     margin-bottom: -5px;
+    overflow: hidden;
+}
+
+.folium-map
+{
+    width: 400px;
+    height: 400px;
+}
+h6
+{
+    margin-top: 100px;
+
+}
+.col-sm
+{
+    margin-bottom: 15px;
 }

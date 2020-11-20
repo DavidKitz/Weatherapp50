@@ -95,8 +95,20 @@ def cast():
         return render_template("forecast.html")
     else:
         city = request.form.get("location")
-        print(forecast(city))
-        return render_template("forecastResults.html")
+        result = weatherapp(city, None)
+
+        data = forecast(result["coord"])
+        timezoneoff = data["timezone_offset"]
+        sunrise = []
+        sunset = []
+        time = []
+        for info in data["daily"]:
+            sunrise.append(datetime.fromtimestamp(info["sunrise"] + timezoneoff).time())
+            sunset.append(datetime.fromtimestamp(info["sunset"] + timezoneoff).time())
+        for i in range(8):
+            time.append((dt.datetime.today() + dt.timedelta(days=i)).date())
+
+        return render_template("forecastResults.html", data = data, city = city, sunrise = sunrise, sunset = sunset, time = time)
 
 
 
