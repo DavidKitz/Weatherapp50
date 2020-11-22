@@ -6,6 +6,7 @@ from flask import redirect, render_template, request, session
 from functools import wraps
 
 
+
 def apology(message, code=400):
     """Render message as an apology to user."""
     def escape(s):
@@ -24,7 +25,6 @@ def apology(message, code=400):
 def weatherapp(city, cityid):
     api_key = os.environ.get("API_KEY")
 
-    print(cityid)
     if cityid is None:
         response = requests.get(f"https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={api_key}")
     else:
@@ -32,13 +32,13 @@ def weatherapp(city, cityid):
 
     return response.json()
 
-
 def forecast(city):
     api_key = os.environ.get("API_KEY")
     lon = city["lon"]
     lat = city["lat"]
     response = requests.get(f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&units=metric&exclude=minutely,hourly&appid={api_key}")
     return response.json()
+
 
 
 def login_required(f):
@@ -53,5 +53,3 @@ def login_required(f):
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
-
-

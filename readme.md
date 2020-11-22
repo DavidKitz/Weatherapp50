@@ -1,13 +1,6 @@
-#Weather app idea
-#get request will include country/region for the requested weather data
-#get weather data on post request
-#information from api
-#Option to save requested regions to database and automatically return weather data on "/" route
-#Maybe ask user for location so automatically can choose weather data based on where you are?
-#USE GPS API: LOOK UP THE C50 Session where they showed how to get current location and add a route with show the weather at
-#my current location
-#add time and date for search history
-#give option to show more details in history (redirect to index page)
-
-## STORE THE REQUESTED MAPS IN INCREMENTING NUMBER COUNT IN TEMPLATES (CHANGES WONT STICK OTHERWISE
-## HTML RELOAD PROBLEM)
+#This is my final CS50x project Wetherapp50. 
+#With the Weatherapp50 you can get current weather information for your requested location, aswell as a
+#forecast for the next 7 days. The app also contains an interactive world map, which shows you the
+#location of the search request with a pin on the map.
+#The Api used to get the weather information in this application is called OpenWeatherMap API.
+#For the world map i used a Python library called Folium.

@@ -8,33 +8,34 @@
     {%endblock%}
 {% block body %}
 <div class="container">
-    <div class="row">
-     {% for info in data["daily"] %}
-     {% if loop.index == 5 %}
-     </div>
-     <div class="row">
-     {% endif %}
-     <div class="col-sm" id="weather-data2">
-      <h3>Date: {{ time[loop.index-1] }}</h3>
-      Weather data for:<br> {{ city }}-area <br>
-      Weather conditions: <br> {{ info["weather"][0]["description"] }}<img src={{"http://openweathermap.org/img/wn/"+info["weather"][0]["icon"]+"@2x.png"}}> <br>
-      Day Temperature: {{ info["temp"]["day"] }}°C
-      Sunrise: {{ sunrise[loop.index-1] }} AM <br>
-      Sunset: {{ sunset[loop.index-1] }} PM
-     </div>
-   
-   
-   
-   
-   
-     {% endfor %}
-   
-     </div>
-    </div>
-   
-   
-   </div>
-   <div class ="center" >
-        <h6>Weatherapp50 <img src="static/heisses-wetter.png"></h6>
-    </div>
+ <div class="row">
+  {% for info in data["daily"] %}
+  {% if loop.index == 5 %}
+  </div>
+  <div class="row">
+  {% endif %}
+  <div class="col-sm" id="weather-data2">
+   <h3>Date: {{ time[loop.index-1] }}</h3>
+   Weather data for:<br> {{ city }}<br>
+   Weather conditions: <br> {{ info["weather"][0]["description"] }}<img src={{"http://openweathermap.org/img/wn/"+info["weather"][0]["icon"]+"@2x.png"}}> <br>
+   Average day temperature: {{ info["temp"]["day"] }}°C <br>
+   Sunrise: {{ sunrise[loop.index-1] }} AM <br>
+   Sunset: {{ sunset[loop.index-1] }} PM
+  </div>
+
+
+
+
+
+  {% endfor %}
+
+  </div>
+ </div>
+
+
+</div>
+<div class ="center" >
+              <h6>Weatherapp50 <img src="static/heisses-wetter.png"></h6>
+</div>
+
 {% endblock %}

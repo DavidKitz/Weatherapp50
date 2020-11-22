@@ -96,7 +96,8 @@ def cast():
     else:
         city = request.form.get("location")
         result = weatherapp(city, None)
-
+        if result["cod"] == "404" or result["name"] == "None":
+            return apology("No data found for your search request",403)
         data = forecast(result["coord"])
         timezoneoff = data["timezone_offset"]
         sunrise = []

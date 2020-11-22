@@ -4,20 +4,19 @@
 
 {% block main %}
 
-<form>
-    <div class="form-group">
-<h3>Welcome to the Weatherapp50 <img src="static/heisses-wetter.png"></h3>
-
-<h5>Feel free to login with your username and password below</h5>
-
+<div class="form-group">
+    <h3>Welcome to the Weatherapp50 <img src="static/heisses-wetter.png"></h3>
+    <h5>Log in with your username and password below</h5>
 </div>
-     <div class="form-group">
-    <input type = "text" class="form-control" name="username" placeholder="Username">
+
+    <div class="form-group">
+<form action="/login" method="POST">
+        <input type = "text" autocomplete="off" class="form-control" name="username" placeholder="Username">
     </div>
      <div class="form-group">
-    <input  type = "password" class="form-control" name="password"  placeholder="Password">
+        <input  type = "password"  class="form-control" name="password"  placeholder="Password">
     </div>
     <button class="btn btn-primary"  type="submit">Log In</button>
 </form>
-<h5>If you dont have an account yet you can register <a href="/register">here</a></h2>
+<h5>If you dont have an account yet, you can register <a href="/register">here</a></h2>
 {% endblock %}
